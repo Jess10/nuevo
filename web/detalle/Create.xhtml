@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="DetalleCreateDlg" widgetVar="DetalleCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{myBundle.CreateDetalleTitle}" closeOnEscape="true">
+
+            <h:form id="DetalleCreateForm">
+
+                <h:panelGroup id="display" rendered="#{detalleController.selected != null}">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{myBundle.CreateDetalleLabel_producto}" for="producto" />
+                        <p:inputText id="producto" value="#{detalleController.selected.producto}" title="#{myBundle.CreateDetalleTitle_producto}" size="128" maxlength="128"/>
+
+                        <p:outputLabel value="#{myBundle.CreateDetalleLabel_cantidad}" for="cantidad" />
+                        <p:inputText id="cantidad" value="#{detalleController.selected.cantidad}" title="#{myBundle.CreateDetalleTitle_cantidad}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateDetalleLabel_precio}" for="precio" />
+                        <p:inputText id="precio" value="#{detalleController.selected.precio}" title="#{myBundle.CreateDetalleTitle_precio}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateDetalleLabel_idf}" for="idf" />
+                        <p:selectOneMenu id="idf" value="#{detalleController.selected.idf}" required="true" requiredMessage="#{myBundle.CreateDetalleRequiredMessage_idf}" converter="facturaConverter">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{facturaController.items}"
+                                           var="idfItem"
+                                           itemValue="#{idfItem}"
+                                           itemLabel="#{idfItem.idf.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{detalleController.saveNew}" value="#{myBundle.Save}" update="display,:DetalleListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('DetalleCreateDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmCreateMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="#{myBundle.Cancel}" oncomplete="PF('DetalleCreateDialog').hide()" update="display" process="@this" immediate="true" resetValues="true"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
